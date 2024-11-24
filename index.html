@@ -532,7 +532,7 @@ function onResize() {
     playfield.style.width = `${boardSize * 128}px`;
     playfield.style.height = `${boardSize * 128}px`;
 
-    var size = Math.min(document.querySelector('body').clientWidth - playfield.offsetLeft, document.querySelector('body').clientHeight);
+    var size = Math.min(window.innerWidth - playfield.offsetLeft, window.innerHeight);
     var scale = (size * 0.75) / (boardSize * 128);
 
     playfield.style.transform = `scale(${scale})`;
