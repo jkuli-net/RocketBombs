@@ -538,6 +538,55 @@ function onResize() {
     playfield.style.transform = `scale(${scale})`;
 }
 
+    
+
+let touchStartX = 0;
+let touchStartY = 0;
+const swipeThreshold = 30;    // Minimum pixels before counting as a swipe
+
+function onTouchStart(e) {
+    if (e.touches.length != 1)
+        return;
+
+    touchStartX = e.touches[0].clientX;
+    touchStartY = e.touches[0].clientY;
+}
+
+function onTouchEnd(e) {
+    if (showWin) {
+        onNewGame();
+        return;
+    }
+
+    let touch = e.changedTouches[0];
+
+    let dx = touch.clientX - touchStartX;
+    let dy = touch.clientY - touchStartY;
+
+    // Ignore tiny movements
+    if (Math.abs(dx) < swipeThreshold &&
+        Math.abs(dy) < swipeThreshold)
+        return;
+
+    if (Math.abs(dx) > Math.abs(dy)) {
+        // Horizontal swipe
+        if (dx > 0)
+            movePlayer(0, nextRight, 1, 0);
+        else
+            movePlayer(0, nextLeft, -1, 0);
+    }
+    else {
+        // Vertical swipe
+        if (dy > 0)
+            movePlayer(0, nextDown, 0, 1);
+        else
+            movePlayer(0, nextUp, 0, -1);
+    }
+}
+
+document.addEventListener("touchstart", onTouchStart, { passive: true });
+document.addEventListener("touchend", onTouchEnd, { passive: true });
+    
 document.getElementById("boardSizeRange").value = boardSize;
 //document.getElementById("seedRange").value = seed;
 document.getElementById("difficultyRange").value = minimumDifficulty;
